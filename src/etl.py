@@ -48,6 +48,7 @@ def main():
 
 
     # TODO: creation of dimension tables --> separate function
+    # TODO: create combined issues_pr facts table
     # TODO: add schema / quality checks
     # TODO: create fact tables
     # TODO: create logic to update dim tables on new batch
