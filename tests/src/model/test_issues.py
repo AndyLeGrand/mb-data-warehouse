@@ -11,7 +11,7 @@ from pyspark.sql.types import StructType
 
 @pytest.fixture
 def create_test_df():
-    issues_data_path: Path = Path("../resources/sample_issues")
+    issues_data_path: Path = Path("tests/src/resources/sample_issues")
     issues: IssuesData = IssuesData(issues_data_path)
 
     return issues
