@@ -52,6 +52,7 @@ jobs:
         AWS_DEFAULT_REGION: eu-north-1
       run: |
         
+        mkdir ~/.aws
         touch ~/.aws/credentials
         
         echo "[default]" > ~/.aws/credentials
