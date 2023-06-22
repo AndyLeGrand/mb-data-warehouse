@@ -43,7 +43,7 @@ jobs:
 
     - name: package application
       run: |
-        emr package --entry-point src\main.py
+        emr package --entry-point src/main.py
 
     - name: Configure AWS Credentials
       env:
@@ -61,5 +61,5 @@ jobs:
 
     - name: deploy application
       run: |
-        emr deploy --entry-point src\main.py --s3-code-uri s3://akreit-dev-bucket/pr_issues_package/${{github.ref_name}}/
+        emr deploy --entry-point src/main.py --s3-code-uri s3://akreit-dev-bucket/pr_issues_package/${{github.ref_name}}/
     
