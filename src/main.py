@@ -17,6 +17,7 @@ from src.model.issues import IssuesData
 from src.model.pull_requests import PRData
 from src.model.milestones import MilestoneData
 from src.model.labels import LabelsData
+from src.model.facts import PRIssuesData
 
 
 def main():
@@ -25,34 +26,31 @@ def main():
     issues_data_path: Path = Path("../data/prepared_issues")
     pr_data_path: Path = Path("../data/prepared_pull_requests")
 
-    issues: IssuesData = IssuesData(issues_data_path)
-    pull_requests: PRData = PRData(pr_data_path)
+    pr_data = PRData(pr_data_path)
+    issues_data = IssuesData(issues_data_path)
 
-    issues_dim_df = issues.prepare_issues_df()
-    issues_dim_df.show()
-    issues_dim_df.printSchema()
+    # generate facts table
+    pr_issues_joined_df = PRIssuesData(pr_data=pr_data, issues_data=issues_data).join_data()
+    pr_issues_joined_df.show()
 
-    pr_dim_df = pull_requests.prepare_pr_df()
-    pr_dim_df.show()
-    pr_dim_df.printSchema()
+    # generate dimension tables
+    label_dim_data = LabelsData(pr_data=pr_data)
+    label_dim_df = label_dim_data.create_dim_df()
+    label_dim_df.show()
 
-    milestones: MilestoneData = MilestoneData(pull_requests)
-    milestones_dim_df = milestones.prepare_milestone_data()
-    milestones_dim_df.show()
-    milestones_dim_df.printSchema()
+    milestone_dim_data = MilestoneData(pr_data=pr_data)
+    milestone_dim_df = milestone_dim_data.create_dim_df()
+    milestone_dim_df.show()
 
-    labels: LabelsData = LabelsData(pull_requests)
-    labels_dim_df = labels.prepare_label_data()
-    labels_dim_df.show()
-    labels_dim_df.printSchema()
-
-    # TODO: creation of dimension tables --> separate function
-    # TODO: implement facts.py --> creation of facts table
+    # TODO: add sinks for data
+    # TODO: does not run yet
 
     # TODO: add schema classes & quality checks when reading data (?)
 
     # TODO: create logic to update dim tables on new batch
     # TODO: should fact tables also be updated?
+
+    # TODO: update data model
 
     # data flow:
     # Spark --> S3 --> copy into Redshift (upsert)

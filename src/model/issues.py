@@ -10,7 +10,7 @@ __license__ = "MIT"
 __version__ = "0.1.0"
 
 from pathlib import Path
-from pyspark.sql import DataFrame
+from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import col
 from src.loader import DataLoader
 
@@ -59,7 +59,7 @@ class IssuesData(DataLoader):
     ]
 
     def __init__(self, path: Path):
-        super().__init__(path)
+        super().__init__(path=path)
         self.input_df = self.load_data()
         self.selected_df = self.input_df.select(*self.issue_cols)
 
