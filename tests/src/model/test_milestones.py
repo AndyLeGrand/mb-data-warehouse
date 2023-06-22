@@ -24,12 +24,12 @@ def test_dim_df_count(create_test_df):
 
     milestones_df: DataFrame = create_test_df.create_dim_df()
     # count should be two only, null milestone from pr3.json dropped
-    assert(milestones_df.count() == 2)
+    assert (milestones_df.count() == 2)
 
 
 def test_dim_df_conditions(create_test_df):
     """extension of previous test: no null ids or duplicates should exist in the labels dimension df"""
 
     labels_df: DataFrame = create_test_df.create_dim_df()
-    assert(labels_df['id'].isNotNull and
+    assert (labels_df['id'].isNotNull and
            labels_df.drop_duplicates().count() == labels_df.count())

@@ -9,9 +9,7 @@ __copyright__ = ""
 __license__ = "MIT"
 __version__ = "0.1.0"
 
-from pathlib import Path
-from pyspark.sql import SparkSession, DataFrame
-from src.loader import DataLoader
+from pyspark.sql import DataFrame
 from src.model.pull_requests import PRData
 
 

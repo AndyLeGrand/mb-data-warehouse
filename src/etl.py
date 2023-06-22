@@ -13,10 +13,10 @@ __version__ = "0.1.0"
 
 import logging
 from pathlib import Path
-from src.model.issues import *
-from src.model.pull_requests import *
-from src.model.milestones import *
-from src.model.labels import *
+from src.model.issues import IssuesData
+from src.model.pull_requests import PRData
+from src.model.milestones import MilestoneData
+from src.model.labels import LabelsData
 
 
 def main():
@@ -45,12 +45,6 @@ def main():
     labels_dim_df = labels.prepare_label_data()
     labels_dim_df.show()
     labels_dim_df.printSchema()
-
-    print(f"labels data before deduplication: {labels_dim_df.count()}")
-    dedup_df: DataFrame = labels.create_label_dim_df()
-    print(f"labels data after deduplication: {dedup_df.count()}")
-
-
 
     # TODO: creation of dimension tables --> separate function
     # TODO: implement facts.py --> creation of facts table
