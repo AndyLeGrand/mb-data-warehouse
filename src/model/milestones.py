@@ -26,7 +26,7 @@ class MilestoneData:
     def __init__(self, pr_data: PRData):
         self.pr_data = pr_data.input_df
 
-    def create_milestone_dim_df(self) -> DataFrame:
+    def prepare_milestone_data(self) -> DataFrame:
         """
         returns a dataframe representing the dimension tablef or milestones.
         Note that the 'creator' field is explicitely dropped because our data
@@ -52,3 +52,14 @@ class MilestoneData:
         return self.pr_data\
             .select("milestone.*")\
             .drop("creator")
+
+    def create_dim_df(self) -> DataFrame:
+        """
+        de-duplicates label data and drops record without id,
+        so that data can be written to normalized dimension table.
+        :return:
+        """
+        return (self.prepare_milestone_data()
+                .na.drop(subset=["id"])
+                .drop_duplicates())
+

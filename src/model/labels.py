@@ -25,16 +25,31 @@ class LabelsData:
     def __init__(self, pr_data: PRData):
         self.pr_data = pr_data.input_df
 
-    def create_label_dim_df(self) -> DataFrame:
+    def prepare_label_data(self) -> DataFrame:
         """
         returns a dataframe representing the dimension table for labels.
-        Note that the 'creator' field is explicitely dropped because our data
-        model excludes the person relation.
 
         schema:
+         |-- color: string (nullable = true)
+         |-- default: boolean (nullable = true)
+         |-- description: string (nullable = true)
+         |-- id: long (nullable = true)
+         |-- name: string (nullable = true)
+         |-- node_id: string (nullable = true)
+         |-- url: string (nullable = true)
         """
         return (
                 self.pr_data
                 .select(explode(col("labels")).alias("labels"))
                 .select("labels.*")
                 )
+
+    def create_dim_df(self) -> DataFrame:
+        """
+        de-duplicates label data and drops record without id,
+        so that data can be written to normalized dimension table.
+        :return:
+        """
+        return (self.prepare_label_data()
+                .na.drop(subset=["id"])
+                .drop_duplicates())

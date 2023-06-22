@@ -24,7 +24,7 @@ class PRData(DataLoader):
     input_df: DataFrame
 
     # list representing the schema of the PullRequests dimension (table)
-    pr_dim_cols = [
+    pr_cols = [
         "id",
         "url",
         "node_id",
@@ -75,23 +75,30 @@ class PRData(DataLoader):
 
     def __init__(self, path: Path):
         super().__init__(path)
-        self.input_df = self.load_data(path)
+        self.input_df = self.load_data()
+        self.selected_df = self.input_df.select(*self.pr_cols)
 
-    def create_pr_dim_df(self) -> DataFrame:
+    def prepare_pr_df(self) -> DataFrame:
         """
-        This method creates the dataframe resulting in the dimension table "pull_requests"
+        This method prepares the pull requests dataframe for the facts table
         :return: dataframe
         """
-        df = DataLoader.select_from_df(
-            self.input_df,
-            self.pr_dim_cols)
 
-        normalized_df = (df
-                         .withColumn("milestone_id", col("milestone.id"))
-                         .withColumn("labels", explode("labels"))
-                         .withColumn("label_id", col("labels.id"))
-                         .drop("milestone")
-                         .drop("labels")
-                         )
+        # since we move labels and milestones to dimension tables, we only need their ids
+        # as foreign keys in our pr data
+        normalized_df: DataFrame = (self.selected_df
+                                    .withColumn("milestone_id", col("milestone.id"))
+                                    .withColumn("labels", explode("labels"))
+                                    .withColumn("label_id", col("labels.id"))
+                                    .drop("milestone")
+                                    .drop("labels")
+                                    )
 
-        return normalized_df
+        # prepend pr_ to each column for easier join
+        prefix = "pr_"
+
+        prefixed_df: DataFrame = normalized_df.select(
+            [normalized_df[clmn].alias(prefix + clmn) for clmn in normalized_df.columns]
+        )
+
+        return prefixed_df

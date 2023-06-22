@@ -1,43 +1,33 @@
 """
 unit tests for module src.model.issues
 """
-import json
+
 import pytest
 from pathlib import Path
-from pyspark.sql import DataFrame
 from src.model.issues import IssuesData
-from pyspark.sql.types import StructType
 
 
 @pytest.fixture
 def create_test_df():
-    issues_data_path: Path = Path("tests/src/resources/sample_issues")
-    issues: IssuesData = IssuesData(issues_data_path)
+    pr_data_path: Path = Path("tests/src/resources/sample_issues")
+    issues: IssuesData = IssuesData(pr_data_path)
 
     return issues
 
 
-def test_prepare_issue_cols():
-    input_cols = ["a", "b", "c", "d"]
-    prefixed_cols = IssuesData.prepare_issue_cols(input_cols, "test_", ["c", "d"])
+def test_issues_prefixes_df(create_test_df):
+    """
+    the final pr df should have only prefixed columns
+    """
+    prepared_df = create_test_df.prepare_issues_df()
 
-    expected = ["a as test_a", "b as test_b"]
-
-    assert(prefixed_cols == expected)
+    assert all(col.startswith("issue_") for col in prepared_df.columns)
 
 
-def test_prepare_issues_df(create_test_df):
+def test_issues_schema_df(create_test_df):
+    """
+    the final pr df's schema should match the length of the list of columns we select from the raw data
+    """
+    prepared_df = create_test_df.prepare_issues_df()
 
-    issues_df: DataFrame = create_test_df.prepare_issues_df()
-    print(issues_df.schema.jsonValue())
-
-    # schema_dict = issues_df.schema.jsonValue()
-    # schema_dict_json = json.dumps(schema_dict)
-    #
-    # with open(str(Path("../../../src/schemas/issues_json_schema")), 'w') as f:
-    #     json.dump(schema_dict_json, f)
-    #
-    # json_schema = issues_df.schema.json()
-    # new_schema = StructType.fromJson(json.loads(json_schema))
-    #
-    # assert(issues_df.schema == new_schema)
+    assert (len(create_test_df.issue_cols) == len(prepared_df.columns))

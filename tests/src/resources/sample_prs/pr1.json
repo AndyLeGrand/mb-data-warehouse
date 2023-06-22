@@ -177,13 +177,22 @@
                 "description": ""
             },
             {
-                "id": 1170217328,
+                "id": null,
                 "node_id": "MDU6TGFiZWwxMTcwMjE3MzI4",
                 "url": "https://api.github.com/repos/grafana/grafana/labels/add%20to%20changelog",
                 "name": "add to changelog",
                 "color": "b8f785",
                 "default": false,
                 "description": ""
+            },
+            {
+                "id": 3719969061,
+                "node_id": "LA_kwDOAOaWjc7dujkl",
+                "url": "https://api.github.com/repos/grafana/grafana/labels/no-backport",
+                "name": "no-backport",
+                "color": "b60205",
+                "default": false,
+                "description": "Skip backport of PR"
             },
             {
                 "id": 3719969061,
