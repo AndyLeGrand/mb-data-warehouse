@@ -11,6 +11,7 @@ __copyright__ = "the author, 2023"
 __license__ = "MIT"
 __version__ = "0.1.0"
 
+import argparse
 import logging
 from pathlib import Path
 from src.model.issues import IssuesData

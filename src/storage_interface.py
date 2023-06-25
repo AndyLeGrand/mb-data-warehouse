@@ -18,7 +18,6 @@ from random import random
 from operator import add
 from pathlib import Path
 from pyspark.sql import SparkSession, DataFrame
-from slash3 import S3Uri
 from pyspark import SparkContext
 from pyspark.conf import SparkConf
 import boto3
