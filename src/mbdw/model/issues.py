@@ -12,9 +12,9 @@ __version__ = "0.1.0"
 
 import logging
 from pathlib import Path
-from pyspark.sql import DataFrame, SparkSession
+from pyspark.sql import DataFrame
 from pyspark.sql.functions import col
-from src.storage_interface import StorageInterface
+from src.mbdw.storage_interface import StorageInterface
 
 
 class IssuesData(StorageInterface):

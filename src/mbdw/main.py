@@ -11,14 +11,12 @@ __copyright__ = "the author, 2023"
 __license__ = "MIT"
 __version__ = "0.1.0"
 
-import argparse
 import logging
-from pathlib import Path
-from src.model.issues import IssuesData
-from src.model.pull_requests import PRData
-from src.model.milestones import MilestoneData
-from src.model.labels import LabelsData
-from src.model.facts import PRIssuesData
+from src.mbdw.model.issues import IssuesData
+from src.mbdw.model.pull_requests import PRData
+from src.mbdw.model.milestones import MilestoneData
+from src.mbdw.model.labels import LabelsData
+from src.mbdw.model.facts import PRIssuesData
 
 
 def main():

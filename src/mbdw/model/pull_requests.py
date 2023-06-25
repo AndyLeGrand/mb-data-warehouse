@@ -12,9 +12,9 @@ __version__ = "0.1.0"
 
 from pathlib import Path
 import logging
-from pyspark.sql import DataFrame, SparkSession
+from pyspark.sql import DataFrame
 from pyspark.sql.functions import explode, col
-from src.storage_interface import StorageInterface
+from src.mbdw.storage_interface import StorageInterface
 
 
 class PRData(StorageInterface):

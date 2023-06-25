@@ -1,5 +1,5 @@
 [project]
-name = "pyspark_issues_pr_pipeline"
+name = "mbdw"
 version = "0.0.1"
 authors = [
   { name="Andreas Kreitschmann", email="a.kreitschmann@gmail.com" }]

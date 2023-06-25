@@ -9,8 +9,8 @@ __license__ = "MIT"
 __version__ = "0.1.0"
 
 from pyspark.sql import DataFrame
-from src.model.pull_requests import PRData
-from src.model.issues import IssuesData
+from src.mbdw.model.pull_requests import PRData
+from src.mbdw.model.issues import IssuesData
 
 
 class PRIssuesData:

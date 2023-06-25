@@ -12,15 +12,8 @@ __license__ = "MIT"
 __version__ = "0.1.0"
 
 import logging
-import sys
-import os
-from random import random
-from operator import add
 from pathlib import Path
 from pyspark.sql import SparkSession, DataFrame
-from pyspark import SparkContext
-from pyspark.conf import SparkConf
-import boto3
 
 
 class StorageInterface:
