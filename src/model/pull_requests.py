@@ -1,21 +1,23 @@
 #!/usr/bin/env python
+
 """
 this module contains a part of the data model
 """
 
 __author__ = "Andreas Kreitschmann"
 __email__ = "a.kreitschmann@gmail.com"
-__copyright__ = ""
+__copyright__ = "the author, 2023"
 __license__ = "MIT"
 __version__ = "0.1.0"
 
 from pathlib import Path
+import logging
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import explode, col
-from src.loader import DataLoader
+from src.storage_interface import StorageInterface
 
 
-class PRData(DataLoader):
+class PRData(StorageInterface):
     """
     class to load and transform pull requests data.
     # TODO: add schema for parsing raw data
@@ -73,9 +75,22 @@ class PRData(DataLoader):
         "changed_files"
     ]
 
-    def __init__(self, path: Path):
-        super().__init__(path=path)
-        self.input_df = self.load_data()
+    def __init__(self,
+                 path: Path = None,
+                 source_type: str = "local",
+                 s3_bucket: str = None,
+                 s3_prefix: str = None):
+
+        if path is None and s3_bucket is None:
+            logging.error("either path or s3_bucket must be specified")
+            raise NotImplementedError
+
+        super().__init__(path=path,
+                         source_type=source_type,
+                         s3_bucket=s3_bucket,
+                         s3_prefix=s3_prefix)
+
+        self.input_df = self.load_json_sources()
         self.selected_df = self.input_df.select(*self.pr_cols)
 
     def prepare_pr_df(self) -> DataFrame:
