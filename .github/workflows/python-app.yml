@@ -43,7 +43,7 @@ jobs:
 
     - name: package application
       run: |
-        emr package --entry-point src/main.py
+        emr package --entry-point src/mbdw/main.py
 
     - name: Configure AWS Credentials
       env:
