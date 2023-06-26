@@ -20,6 +20,13 @@ The tested approaches include:
 
     python -m build
 
+Since this application was built to be run on AWS infrastructure, the [aws-emr-cli](https://pypi.org/project/aws-emr-cli/) Python library
+offers a convenient alternative for packaging the application:
+
+    emr package --entry-point main.py
+
+Further information on how the second option works in detail, visit this [page](https://aws.amazon.com/de/blogs/big-data/build-deploy-and-run-spark-jobs-on-amazon-emr-with-the-open-source-emr-cli-tool/)
+
 ## How to use project
 
 
