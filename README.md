@@ -5,6 +5,15 @@
 
 This repository contains code and configuration for a pyspark data pipeline using AWS cloud infrastructure
 
+
+**Repo structure**:
+
+main.py: entrypoint of the spark application    
+mbdw: package containing application logic  
+|-- model: contains all aspects of the data model   
+|-- data_quality: contains functionality to assess data quality (no implemented)    
+|-- storage_interface.py: an interface for loading data and writing data to / from storage  
+
 ## Maintainer
 
 Andreas Kreitschmann, e-mail: [a.kreitschmann@gmail.com](mailto:a.kreitschmann@gmail.com)
