@@ -15,7 +15,7 @@ from mbdw.model.issues import IssuesData
 from mbdw.model.pull_requests import PRData
 from mbdw.model.milestones import MilestoneData
 from mbdw.model.labels import LabelsData
-from mbdw.model.facts import PRIssuesData
+from mbdw.model.issues_prs import PRIssuesData
 
 
 def main():
@@ -23,8 +23,6 @@ def main():
 
     # issues_data_path: Path = Path("../data/prepared_issues")
     # pr_data_path: Path = Path("../data/prepared_pull_requests")
-
-    # TODO: make data soure and sink configurable via yaml
 
     s3_bucket: str = "akreit-dev-bucket"
     s3_issue_prefix: str = "prepared_issues"
