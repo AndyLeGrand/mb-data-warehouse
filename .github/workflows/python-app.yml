@@ -19,7 +19,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.10
+    - name: Set up Python 3.7
       uses: actions/setup-python@v3
       with:
         python-version: "3.7.16"
@@ -69,7 +69,7 @@ jobs:
         S3_BUCKET: mb-data-warehouse
       run: |
         echo "deploying to the following s3 bucket: ${S3_BUCKET}"
-        emr deploy --entry-point main.py --s3-code-uri s3://${S3_BUCKET}/pr_issues_package/${{github.ref_name}}/
+        emr deploy --entry-point main.py --s3-code-uri s3://${S3_BUCKET}/pyspark_package/${{github.ref_name}}/
 
     - name: Deploy package to S3 dev
       if: github.ref == 'refs/heads/develop'
@@ -77,5 +77,5 @@ jobs:
         S3_BUCKET: akreit-dev-bucket
       run: |
         echo "deploying to the following s3 bucket: ${S3_BUCKET}"
-        emr deploy --entry-point main.py --s3-code-uri s3://${S3_BUCKET}/pr_issues_package/${{github.ref_name}}/
+        emr deploy --entry-point main.py --s3-code-uri s3://${S3_BUCKET}/pyspark_package/${{github.ref_name}}/
     

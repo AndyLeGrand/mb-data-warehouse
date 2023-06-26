@@ -1,5 +1,8 @@
+#!/usr/bin/env python
+
 """
-Class for preparation of final facts dataframe / table
+This module represents the joined data from the issues and pull requests relations.
+The relations are joined to make analytical use of both relations together simpler.
 """
 
 __author__ = "Andreas Kreitschmann"

@@ -4,15 +4,21 @@ unit tests for module src2.model.labels
 
 import pytest
 from pathlib import Path
+from pyspark.sql import SparkSession
 from pyspark.sql import DataFrame
 from mbdw.model.pull_requests import PRData
 from mbdw.model.labels import LabelsData
 
 
+@pytest.fixture()
+def create_spark_session():
+    return SparkSession.builder.getOrCreate()
+
+
 @pytest.fixture
-def create_test_df():
+def create_test_df(create_spark_session):
     pr_data_path: Path = Path("tests/mbdw/resources/sample_prs/pr1.json")
-    prs: PRData = PRData(pr_data_path)
+    prs: PRData = PRData(create_spark_session, pr_data_path)
 
     labels: LabelsData = LabelsData(prs)
 

@@ -16,7 +16,7 @@ from pathlib import Path
 from pyspark.sql import SparkSession, DataFrame
 
 
-class StorageInterface:
+class DataLoader:
     """
     base class for loading and transforming raw data.
     TODO: add interface to load from S3
@@ -25,6 +25,7 @@ class StorageInterface:
     data_path: str
 
     def __init__(self,
+                 spark: SparkSession,
                  path: Path = None,
                  source_type: str = "local",
                  s3_bucket: str = None,
@@ -37,7 +38,7 @@ class StorageInterface:
         :param s3_bucket: bucket name (without leading s3:// or trailing slashes)
         :param s3_prefix: s3 prefix w/o slashes such that object id becomes: s3://<bucket_name>/<s3_prefix>
         """
-        self.spark: SparkSession = SparkSession.builder.appName("pr_issues_loader").getOrCreate()
+        self.spark: SparkSession = spark
 
         if source_type == 'local':
             logging.info("reading data from local path")
