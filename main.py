@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 """
-This module contains the transformation logic for trasnforming raw json data into tabular data to be stored in a data
-warehouse.
+Entry point for the pyspark application.
 """
 
 __author__ = "Andreas Kreitschmann"
