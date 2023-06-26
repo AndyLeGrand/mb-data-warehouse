@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  build-deploy:
 
     runs-on: ubuntu-latest
 
@@ -45,6 +45,7 @@ jobs:
       run: |
         emr package --entry-point main.py
 
+
     - name: Configure AWS Credentials
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -62,14 +63,21 @@ jobs:
         echo "region=${AWS_DEFAULT_REGION}" >> ~/.aws/config
         
 
-    - name: deploy application
-      run: >-
-        if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
-          echo "S3_BUCKET=mb-data-warehouse" >> $env:S3_BUCKET
-        elif [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
-          echo "S3_BUCKET=akreit-dev-bucket" >> $env:S3_BUCKET
-        fi
+    - name: deploy application to dev s3
+      if: github.ref == 'refs/heads/develop'
+      run: |
+
+        echo "S3_BUCKET=akreit-dev-bucket" >> $env:S3_BUCKET
+        echo "deploying to the following s3 bucket: ${S3_BUCKET}
         
+        emr deploy --entry-point main.py --s3-code-uri s3://${S3_BUCKET}/pr_issues_package/${{github.ref_name}}/
+        
+
+    - name: deploy application to prod s3
+      if: github.ref == 'refs/heads/master'
+      run: |
+
+        echo "S3_BUCKET=mb-data-warehouse" >> $env:S3_BUCKET
         echo "deploying to the following s3 bucket: ${S3_BUCKET}
         
         emr deploy --entry-point main.py --s3-code-uri s3://${S3_BUCKET}/pr_issues_package/${{github.ref_name}}/
