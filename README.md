@@ -53,8 +53,8 @@ You can simply edit the file `.github/workflows/python-app.yml` to adjust the ta
 ### Run the app
 
 Once your pyspark package is deployed to S3 (see previous point), you can run the application on any of the available AWS EMR flavours.
-For testing, these have been provisioned manually. A future improvement of this package is to include automated provisioning
-of infrastructure, e.g. an AWS EMR Serverless instance / application.
+During development, the infrastructure for this project has been provisioned manually. A future improvement of this package is to include automated provisioning
+of infrastructure, e.g. an AWS EMR Serverless instance / application (or AWS on EC2).
 Details on the setup of an AWS EMR Serverless application can be found [here](https://docs.aws.amazon.com/emr/latest/EMR-Serverless-UserGuide/getting-started.html)
 
 Once the Spark cluster is available, an easy way to start the Spark is using the aws-emr-cli, like so:
@@ -62,7 +62,7 @@ Once the Spark cluster is available, an easy way to start the Spark is using the
 ```
     emr run --application-id <your EMR serverless application ID> \
          --job-role <job role created during setup of EMR serverless application>
-         --s3-code-uri s3://akreit-dev-bucket/pr_issues_package/master/
+         --s3-code-uri s3://<S3 Bucket>/<prefix where the CI/CD pipeline deployed the code>/master/
          --entry-point main.py
          --job-name pr_issues_transform
          --wait
@@ -73,6 +73,15 @@ AWS access, e.g. via aws-cli. More on this [here](https://docs.aws.amazon.com/cl
 This can be useful during development e.g. in a local environment.
 
 For productive workloads, a scheduler like Apache Airflow should be used.
+
+Upon successful termination, the application writes parquet files back to the specified S3 bucket.
+These can now be loaded into a Data Warehouse, e.g. AWS Redshift using a simple COPY command.
+
+### Open Issues
+
+- implement data quality check module
+- load final parquet data into Redshift table & expose SQL endpoint
+- set up automatic provisioning of AWS EMR Serverless application (has been provisioned manually so far)
 
 
 
