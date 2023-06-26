@@ -4,13 +4,19 @@ unit tests for module src2.model.issues
 
 import pytest
 from pathlib import Path
-from src.mbdw.model.issues import IssuesData
+from pyspark.sql import SparkSession
+from mbdw.model.issues import IssuesData
+
+
+@pytest.fixture()
+def create_spark_session():
+    return SparkSession.builder.getOrCreate()
 
 
 @pytest.fixture
-def create_test_df():
-    pr_data_path: Path = Path("tests/mbdw/src/resources/sample_issues")
-    issues: IssuesData = IssuesData(pr_data_path)
+def create_test_df(create_spark_session):
+    pr_data_path: Path = Path("tests/mbdw/resources/sample_issues")
+    issues: IssuesData = IssuesData(create_spark_session, pr_data_path)
 
     return issues
 

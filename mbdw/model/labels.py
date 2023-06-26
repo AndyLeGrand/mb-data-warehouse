@@ -11,7 +11,7 @@ __version__ = "0.1.0"
 
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import explode, col
-from src.mbdw.model.pull_requests import PRData
+from mbdw.model.pull_requests import PRData
 
 
 class LabelsData:

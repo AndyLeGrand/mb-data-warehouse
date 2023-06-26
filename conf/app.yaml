@@ -1,6 +1,0 @@
-dev:
-  - s3_bucket: akreit-dev-bucket
-  - s3_output_prefix: output
-
-prod:
-  - s3_bucket:

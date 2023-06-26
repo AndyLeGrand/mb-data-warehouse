@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-this module contains a part of the data model
+This module represents the issues relation in the data model.
 """
 
 __author__ = "Andreas Kreitschmann"
@@ -12,20 +12,20 @@ __version__ = "0.1.0"
 
 import logging
 from pathlib import Path
+from pyspark.sql import SparkSession
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col
-from src.mbdw.storage_interface import StorageInterface
+from mbdw.storage_interface import DataLoader
 
 
-class IssuesData(StorageInterface):
+class IssuesData(DataLoader):
     """
     class to load and transform issues data.
-    # TODO: add schema for parsing raw data
     """
-
     input_df: DataFrame
 
     # the following list represents the schema of the Issues dimension (table)
+    # multiple columns are excluded for simplification
     issue_cols = [
         "id",  # primary key for Issue dimension
         "url",
@@ -61,6 +61,7 @@ class IssuesData(StorageInterface):
     ]
 
     def __init__(self,
+                 spark: SparkSession,
                  path: Path = None,
                  source_type: str = "local",
                  s3_bucket: str = None,
@@ -71,7 +72,12 @@ class IssuesData(StorageInterface):
             logging.error("either path or s3_bucket must be specified")
             raise NotImplementedError
 
-        super().__init__(path=path, source_type=source_type, s3_bucket=s3_bucket, s3_prefix=s3_prefix)
+        super().__init__(spark=spark,
+                         path=path,
+                         source_type=source_type,
+                         s3_bucket=s3_bucket,
+                         s3_prefix=s3_prefix)
+
         self.input_df = self.load_json_sources()
         self.selected_df = self.input_df.select(*self.issue_cols)
 

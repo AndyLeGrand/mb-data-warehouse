@@ -10,7 +10,7 @@ __license__ = "MIT"
 __version__ = "0.1.0"
 
 from pyspark.sql import DataFrame
-from src.mbdw.model.pull_requests import PRData
+from mbdw.model.pull_requests import PRData
 
 
 class MilestoneData:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-this module contains a part of the data model
+This module represents the pull requests relation in the data model.
 """
 
 __author__ = "Andreas Kreitschmann"
@@ -12,12 +12,13 @@ __version__ = "0.1.0"
 
 from pathlib import Path
 import logging
+from pyspark.sql import SparkSession
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import explode, col
-from src.mbdw.storage_interface import StorageInterface
+from mbdw.storage_interface import DataLoader
 
 
-class PRData(StorageInterface):
+class PRData(DataLoader):
     """
     class to load and transform pull requests data.
     # TODO: add schema for parsing raw data
@@ -25,7 +26,8 @@ class PRData(StorageInterface):
     # input data
     input_df: DataFrame
 
-    # list representing the schema of the PullRequests dimension (table)
+    # list representing the schema of the PullRequests relation
+    # multiple columns are excluded for simplification
     pr_cols = [
         "id",
         "url",
@@ -76,19 +78,21 @@ class PRData(StorageInterface):
     ]
 
     def __init__(self,
+                 spark: SparkSession,
                  path: Path = None,
                  source_type: str = "local",
                  s3_bucket: str = None,
                  s3_prefix: str = None):
-
         if path is None and s3_bucket is None:
             logging.error("either path or s3_bucket must be specified")
             raise NotImplementedError
 
-        super().__init__(path=path,
-                         source_type=source_type,
-                         s3_bucket=s3_bucket,
-                         s3_prefix=s3_prefix)
+        super().__init__(
+            spark=spark,
+            path=path,
+            source_type=source_type,
+            s3_bucket=s3_bucket,
+            s3_prefix=s3_prefix)
 
         self.input_df = self.load_json_sources()
         self.selected_df = self.input_df.select(*self.pr_cols)

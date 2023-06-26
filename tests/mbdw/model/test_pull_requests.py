@@ -4,13 +4,19 @@ unit tests for module src2.model.pull_requests
 
 import pytest
 from pathlib import Path
-from src.mbdw.model.pull_requests import PRData
+from pyspark.sql import SparkSession
+from mbdw.model.pull_requests import PRData
+
+
+@pytest.fixture()
+def create_spark_session() -> SparkSession:
+    return SparkSession.builder.getOrCreate()
 
 
 @pytest.fixture
-def create_test_df():
-    pr_data_path: Path = Path("tests/mbdw/src/resources/sample_prs")
-    prs: PRData = PRData(pr_data_path)
+def create_test_df(create_spark_session) -> PRData:
+    pr_data_path: Path = Path("tests/mbdw/resources/sample_prs")
+    prs: PRData = PRData(create_spark_session, pr_data_path)
 
     return prs
 

@@ -1,18 +1,26 @@
+#!/usr/bin/env python
+
 """
 unit tests for module src2.model.milestones
 """
 
 import pytest
 from pathlib import Path
+from pyspark.sql import SparkSession
 from pyspark.sql import DataFrame
-from src.mbdw.model.pull_requests import PRData
-from src.mbdw.model.milestones import MilestoneData
+from mbdw.model.pull_requests import PRData
+from mbdw.model.milestones import MilestoneData
 
 
 @pytest.fixture
-def create_test_df():
-    pr_data_path: Path = Path("tests/mbdw/src/resources/sample_prs")
-    prs: PRData = PRData(pr_data_path)
+def create_spark_session() -> SparkSession:
+    return SparkSession.builder.getOrCreate()
+
+
+@pytest.fixture
+def create_test_df(create_spark_session):
+    pr_data_path: Path = Path("tests/mbdw/resources/sample_prs")
+    prs: PRData = PRData(create_spark_session, pr_data_path)
 
     milestone: MilestoneData = MilestoneData(prs)
 

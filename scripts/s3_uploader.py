@@ -8,7 +8,8 @@ import boto3
 from botocore.exceptions import ClientError
 import os
 
-S3_BUCKET_NAME = "akreit-dev-bucket"
+S3_BUCKET_NAME_DEV = "akreit-dev-bucket"
+S3_BUCKET_NAME_PROD = "mb-data-warehouse"
 
 
 def main():
@@ -18,12 +19,13 @@ def main():
     for bucket in s3.buckets.all():
         print(bucket.name)
 
-    # we currently have
-    issues_data_path = Path("data/prepared_issues/prepared_issues.json")
-    pr_data_path = Path("data/prepared_pull_requests/prepared_pull_requests.json")
+    # get path to raw data
+    issues_data_path = Path("../mbdw/resources/data/prepared_issues/prepared_issues.json")
+    pr_data_path = Path("../mbdw/resources/data/prepared_pull_requests/prepared_pull_requests.json")
 
-    upload_file(str(issues_data_path), S3_BUCKET_NAME)
-    upload_file(str(pr_data_path), S3_BUCKET_NAME)
+    # upload data
+    upload_file(str(issues_data_path), S3_BUCKET_NAME_PROD, f"data/raw/issues/{os.path.basename(issues_data_path)}")
+    upload_file(str(pr_data_path), S3_BUCKET_NAME_PROD, f"data/raw/issues{os.path.basename(pr_data_path)}")
 
 
 def upload_file(file_name, bucket, object_name=None):
