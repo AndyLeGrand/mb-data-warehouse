@@ -36,6 +36,11 @@ Execute all tests by running `pytest -vvv` in the projects root directory.
 
 ## How to use the project
 
+This project loads, transforms and writes data using Apache Spark. It can be run locally in standalone mode (during development).
+To run the application for production loads, it should be run on a Spark cluster instead.
+
+
+
 ### Deploy the app
 
 ### Run the app
