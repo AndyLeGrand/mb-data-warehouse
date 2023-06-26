@@ -39,21 +39,20 @@ class StorageInterface:
         """
         self.spark: SparkSession = SparkSession.builder.appName("pr_issues_loader").getOrCreate()
 
-        match source_type:
-            case "local":
-                logging.info("reading data from local path")
-                self.data_path = str(path)
-            case "s3":
-                if s3_bucket is None:
-                    logging.error("for s3 data source, specify bucket and optionally a prefix")
-                    raise FileNotFoundError
-                else:
-                    logging.info("reading data from s3 p")
-                    # self.data_path = str(S3Uri.to_uri(s3_bucket, s3_prefix))
-                    self.data_path = f"s3://{s3_bucket}/{s3_prefix}/"
-            case _:
-                logging.error("currently only local / hdfs or s3 sources are supported")
-                raise NotImplementedError
+        if source_type == 'local':
+            logging.info("reading data from local path")
+            self.data_path = str(path)
+        elif source_type == "s3":
+            if s3_bucket is None:
+                logging.error("for s3 data source, specify bucket and optionally a prefix")
+                raise FileNotFoundError
+            else:
+                logging.info("reading data from s3")
+                # self.data_path = str(S3Uri.to_uri(s3_bucket, s3_prefix))
+                self.data_path = f"s3://{s3_bucket}/{s3_prefix}/"
+        else:
+            logging.error("currently only local / hdfs or s3 sources are supported")
+            raise NotImplementedError
 
     def load_json_sources(self) -> DataFrame:
         logging.info(f"attempting to load source data from {self.data_path}")

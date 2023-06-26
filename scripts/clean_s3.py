@@ -1,8 +1,8 @@
 """
 helper script to delete artifacts from S3 during development.
 """
-import logging
 
+import logging
 import boto3
 
 S3_BUCKET_NAME = "akreit-dev-bucket"

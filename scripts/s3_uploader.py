@@ -19,8 +19,8 @@ def main():
         print(bucket.name)
 
     # we currently have
-    issues_data_path = Path("data/prepared_issues/prepared_issues.json")
-    pr_data_path = Path("data/prepared_pull_requests/prepared_pull_requests.json")
+    issues_data_path = Path("mbdw/resources/data/prepared_issues/prepared_issues.json")
+    pr_data_path = Path("mbdw/resources/data/prepared_pull_requests/prepared_pull_requests.json")
 
     upload_file(str(issues_data_path), S3_BUCKET_NAME)
     upload_file(str(pr_data_path), S3_BUCKET_NAME)
