@@ -79,11 +79,12 @@ class DataWriter:
 
         logging.info(f"re-using Spark session for: {self.spark.sparkContext.applicationId}")
 
-        match sink_type:
-            case "local":
-                pass
-            case "s3":
-                self.write_to_s3()
+        if sink_type == 'local':
+            pass
+        elif sink_type == "s3":
+            self.write_to_s3()
+        else:
+            raise NotImplementedError
 
     def write_to_hdfs(self) -> None:
         pass
