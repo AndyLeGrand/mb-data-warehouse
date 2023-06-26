@@ -11,11 +11,11 @@ __license__ = "MIT"
 __version__ = "0.1.0"
 
 import logging
-from src.mbdw.model.issues import IssuesData
-from src.mbdw.model.pull_requests import PRData
-from src.mbdw.model.milestones import MilestoneData
-from src.mbdw.model.labels import LabelsData
-from src.mbdw.model.facts import PRIssuesData
+from mbdw.model.issues import IssuesData
+from mbdw.model.pull_requests import PRData
+from mbdw.model.milestones import MilestoneData
+from mbdw.model.labels import LabelsData
+from mbdw.model.facts import PRIssuesData
 
 
 def main():

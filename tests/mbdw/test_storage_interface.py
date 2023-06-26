@@ -5,7 +5,7 @@ unit tests for module src2.loader
 import pytest
 from pathlib import Path
 from pyspark.sql.utils import AnalysisException
-from src.mbdw.storage_interface import StorageInterface
+from mbdw.storage_interface import StorageInterface
 
 
 def test_loader_instantiaton_local():
@@ -13,7 +13,7 @@ def test_loader_instantiaton_local():
     loading data from a local path should work
     """
     try:
-        loader: StorageInterface = StorageInterface(Path("tests/mbdw/src/resources/sample_issues"))
+        loader: StorageInterface = StorageInterface(Path("tests/mbdw/resources/sample_issues"))
         loader.load_json_sources().printSchema()
     except AnalysisException:
         pytest.fail("data could not be loaded")
@@ -27,7 +27,7 @@ def test_loader_instantiaton_not_impl():
     """
 
     with pytest.raises(NotImplementedError):
-        assert StorageInterface(path=Path("tests/mbdw/src/resources/sample_issues"), source_type="hive")
+        assert StorageInterface(path=Path("tests/mbdw/mbdw/resources/sample_issues"), source_type="hive")
 
 
 def test_loader_instantiaton_s3():

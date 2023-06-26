@@ -4,12 +4,12 @@ unit tests for module src2.model.pull_requests
 
 import pytest
 from pathlib import Path
-from src.mbdw.model.pull_requests import PRData
+from mbdw.model.pull_requests import PRData
 
 
 @pytest.fixture
 def create_test_df():
-    pr_data_path: Path = Path("tests/mbdw/src/resources/sample_prs")
+    pr_data_path: Path = Path("tests/mbdw/resources/sample_prs")
     prs: PRData = PRData(pr_data_path)
 
     return prs

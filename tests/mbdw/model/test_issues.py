@@ -4,12 +4,12 @@ unit tests for module src2.model.issues
 
 import pytest
 from pathlib import Path
-from src.mbdw.model.issues import IssuesData
+from mbdw.model.issues import IssuesData
 
 
 @pytest.fixture
 def create_test_df():
-    pr_data_path: Path = Path("tests/mbdw/src/resources/sample_issues")
+    pr_data_path: Path = Path("tests/mbdw/resources/sample_issues")
     issues: IssuesData = IssuesData(pr_data_path)
 
     return issues

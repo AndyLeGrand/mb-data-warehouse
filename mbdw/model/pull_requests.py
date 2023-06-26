@@ -14,7 +14,7 @@ from pathlib import Path
 import logging
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import explode, col
-from src.mbdw.storage_interface import StorageInterface
+from mbdw.storage_interface import StorageInterface
 
 
 class PRData(StorageInterface):

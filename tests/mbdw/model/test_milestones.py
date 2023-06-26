@@ -1,29 +1,30 @@
 """
-unit tests for module src2.model.labels
+unit tests for module src2.model.milestones
 """
 
 import pytest
 from pathlib import Path
 from pyspark.sql import DataFrame
-from src.mbdw.model.pull_requests import PRData
-from src.mbdw.model.labels import LabelsData
+from mbdw.model.pull_requests import PRData
+from mbdw.model.milestones import MilestoneData
 
 
 @pytest.fixture
 def create_test_df():
-    pr_data_path: Path = Path("tests/mbdw/src/resources/sample_prs/pr1.json")
+    pr_data_path: Path = Path("tests/mbdw/resources/sample_prs")
     prs: PRData = PRData(pr_data_path)
 
-    labels: LabelsData = LabelsData(prs)
+    milestone: MilestoneData = MilestoneData(prs)
 
-    return labels
+    return milestone
 
 
 def test_dim_df_count(create_test_df):
     """tests whether duplicate and null ids are dropped as intended"""
 
-    labels_df: DataFrame = create_test_df.create_dim_df()
-    assert (labels_df.count() == 3)
+    milestones_df: DataFrame = create_test_df.create_dim_df()
+    # count should be two only, null milestone from pr3.json dropped
+    assert (milestones_df.count() == 2)
 
 
 def test_dim_df_conditions(create_test_df):
