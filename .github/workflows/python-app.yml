@@ -66,9 +66,9 @@ jobs:
       run: |
         
         if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
-            echo "S3_BUCKET=mb-data-warehouse" >> $S3_BUCKET
+            echo "S3_BUCKET=mb-data-warehouse" >> $env:S3_BUCKET
         elif [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
-          echo "S3_BUCKET=akreit-dev-bucket" >> $S3_BUCKET
+          echo "S3_BUCKET=akreit-dev-bucket" >> $env:S3_BUCKET
         fi
         
         echo "deploying to the following s3 bucket: ${S3_BUCKET}
