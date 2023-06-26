@@ -36,3 +36,4 @@ class PRIssuesData:
 
         return joined_df
 
+
