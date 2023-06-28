@@ -33,8 +33,8 @@ def main():
                            .config("spark.jars.excludes", pydeequ.f2j_maven_coord)
                            .getOrCreate())
 
-    s3_issue_prefix: str = "prepared_issues"
-    s3_pr_prefix: str = "prepared_pull_requests"
+    s3_issue_prefix: str = "data/raw/issues"
+    s3_pr_prefix: str = "data/raw/pull_requests"
 
     pr_data = PRData(
         spark=spark,
@@ -53,19 +53,19 @@ def main():
     # pr & issues data semi-normalized
     pr_issues_joined_df = PRIssuesData(pr_data=pr_data, issues_data=issues_data).join_data()
     # pr_issues_joined_df.show()
-    pr_issues_joined_df.write.parquet(path=f"s3://{S3_BUCKET}/output/pr_issues_joined", mode="append")
+    pr_issues_joined_df.write.parquet(path=f"s3://{S3_BUCKET}/data/output/pr_issues_joined", mode="append")
 
     # labels data
     label_dim_data = LabelsData(pr_data=pr_data)
     label_dim_df = label_dim_data.create_dim_df()
     # label_dim_df.show()
-    label_dim_df.write.parquet(path=f"s3://{S3_BUCKET}/output/labels", mode="append")
+    label_dim_df.write.parquet(path=f"s3://{S3_BUCKET}/data/output/labels", mode="append")
 
     # milestones data
     milestone_dim_data = MilestoneData(pr_data=pr_data)
     milestone_dim_df = milestone_dim_data.create_dim_df()
     # milestone_dim_df.show()
-    milestone_dim_df.write.parquet(path=f"s3://{S3_BUCKET}/output/milestones", mode="append")
+    milestone_dim_df.write.parquet(path=f"s3://{S3_BUCKET}/data/output/milestones", mode="append")
 
 
 if __name__ == '__main__':

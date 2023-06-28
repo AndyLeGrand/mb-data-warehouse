@@ -5,13 +5,13 @@ helper script to delete artifacts from S3 during development.
 import logging
 import boto3
 
-S3_BUCKET_NAME = "akreit-dev-bucket"
+S3_BUCKET_NAME = "mb-data-warehouse"
 
 
 def main():
     # Usage example
     bucket_name = S3_BUCKET_NAME
-    prefix = 'pr_issues_package/'
+    prefix = 'data/raw/'
 
     delete_objects_in_bucket(bucket_name, prefix)
 

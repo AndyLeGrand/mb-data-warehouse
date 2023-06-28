@@ -25,7 +25,7 @@ def main():
 
     # upload data
     upload_file(str(issues_data_path), S3_BUCKET_NAME_PROD, f"data/raw/issues/{os.path.basename(issues_data_path)}")
-    upload_file(str(pr_data_path), S3_BUCKET_NAME_PROD, f"data/raw/issues{os.path.basename(pr_data_path)}")
+    upload_file(str(pr_data_path), S3_BUCKET_NAME_PROD, f"data/raw/pull_requests/{os.path.basename(pr_data_path)}")
 
 
 def upload_file(file_name, bucket, object_name=None):
