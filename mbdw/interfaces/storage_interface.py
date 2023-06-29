@@ -70,31 +70,25 @@ class DataWriter:
     class for writing data to sinks
     """
     spark: SparkSession
+    df: DataFrame
 
-    def __init__(self, sink_type: str):
+    def __init__(self, spark: SparkSession, df: DataFrame):
         """
         create a Spark dataframe writer object pre-configured for the desired sink type
-        :param sink_type:
         """
-        self.spark: SparkSession = SparkSession.getActiveSession()
+        self.spark: SparkSession = spark
+        self.df = df
 
         logging.info(f"re-using Spark session for: {self.spark.sparkContext.applicationId}")
 
-        if sink_type == 'local':
-            pass
-        elif sink_type == "s3":
-            self.write_to_s3()
-        else:
-            raise NotImplementedError
-
-    def write_to_hdfs(self) -> None:
-        pass
+    def write_to_hdfs(self, path: str) -> None:
+        self.df.write.parquet(path=path, mode="append")
 
     def write_to_hive_tbl(self) -> None:
         pass
 
-    def write_to_s3(self) -> None:
-        sc = self.spark.sparkContext
+    def write_to_s3(self, s3_bucket: str, prefix: str) -> None:
+        self.df.write.parquet(f"s3://{s3_bucket}/{prefix}", mode="append")
 
         # sc._jsc.hadoopConfiguration().set("fs.s3.awsAccessKeyId", access_key)
         # sc._jsc.hadoopConfiguration().set("fs.s3n.awsAccessKeyId", access_key)

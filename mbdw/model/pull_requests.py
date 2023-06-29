@@ -15,7 +15,7 @@ import logging
 from pyspark.sql import SparkSession
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import explode, col
-from mbdw.storage_interface import DataLoader
+from mbdw.interfaces.storage_interface import DataLoader
 
 
 class PRData(DataLoader):

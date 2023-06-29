@@ -11,8 +11,11 @@ __license__ = "MIT"
 __version__ = "0.1.0"
 
 import logging
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, DataFrame
+from typing import List
+from datetime import datetime
 import pydeequ
+from mbdw.interfaces.storage_interface import DataWriter
 from mbdw.model.issues import IssuesData
 from mbdw.model.pull_requests import PRData
 from mbdw.model.milestones import MilestoneData
@@ -24,8 +27,8 @@ S3_BUCKET: str = "mb-data-warehouse"
 
 
 def main():
-    logging.info("reading raw data")
 
+    # create a spark session
     spark: SparkSession = (SparkSession
                            .builder
                            .appName("pr_issues_loader")
@@ -33,6 +36,7 @@ def main():
                            .config("spark.jars.excludes", pydeequ.f2j_maven_coord)
                            .getOrCreate())
 
+    # read raw data
     s3_issue_prefix: str = "data/raw/issues"
     s3_pr_prefix: str = "data/raw/pull_requests"
 
@@ -47,25 +51,25 @@ def main():
                              source_type="s3",
                              s3_prefix=s3_issue_prefix)
 
-    # pr_data = PRData(path=pr_data_path)
-    # issues_data = IssuesData(path=issues_data_path)
-
     # pr & issues data semi-normalized
     pr_issues_joined_df = PRIssuesData(pr_data=pr_data, issues_data=issues_data).join_data()
-    # pr_issues_joined_df.show()
-    pr_issues_joined_df.write.parquet(path=f"s3://{S3_BUCKET}/data/output/pr_issues_joined", mode="append")
 
     # labels data
-    label_dim_data = LabelsData(pr_data=pr_data)
-    label_dim_df = label_dim_data.create_dim_df()
-    # label_dim_df.show()
-    label_dim_df.write.parquet(path=f"s3://{S3_BUCKET}/data/output/labels", mode="append")
+    labels_data: LabelsData = LabelsData(pr_data=pr_data)
+    labels_df: DataFrame = labels_data.create_dim_df()
 
     # milestones data
-    milestone_dim_data = MilestoneData(pr_data=pr_data)
-    milestone_dim_df = milestone_dim_data.create_dim_df()
-    # milestone_dim_df.show()
-    milestone_dim_df.write.parquet(path=f"s3://{S3_BUCKET}/data/output/milestones", mode="append")
+    milestones_data: MilestoneData = MilestoneData(pr_data=pr_data)
+    milestones_df: DataFrame = milestones_data.create_dim_df()
+
+    # write prepared data back to S3
+    dfs_to_write: List[DataFrame] = [pr_issues_joined_df, labels_df, milestones_df]
+    obj_suffixes: List[str] = ["pr_issues", "labels", "milestones"]
+
+    for idx, df in enumerate(dfs_to_write):
+        writer: DataWriter = DataWriter(spark, df)
+        date_str: str = datetime.today().strftime('%Y-%m-%d')
+        writer.write_to_s3(s3_bucket=S3_BUCKET, prefix=f"data/output/{date_str}/{obj_suffixes[idx]}")
 
 
 if __name__ == '__main__':

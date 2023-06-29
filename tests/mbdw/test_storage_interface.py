@@ -6,7 +6,7 @@ import pytest
 from pathlib import Path
 from pyspark.sql import SparkSession
 from pyspark.sql.utils import AnalysisException
-from mbdw.storage_interface import DataLoader
+from mbdw.interfaces.storage_interface import DataLoader
 
 
 @pytest.fixture()
